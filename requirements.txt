@@ -5,3 +5,4 @@ SQLAlchemy~=2.0.37
 flasgger~=0.9.7.1
 Flask-SQLAlchemy
 gunicorn
+psycopg2
