@@ -5,7 +5,7 @@ from sqlalchemy import text
 import os
 
 from config import Config
-from app.extensions import db, migrate, swagger
+from app.extensions import db, swagger
 from app.models import User
 
 
@@ -19,16 +19,16 @@ def create_app(config_class=Config):
     db.init_app(app)
     swagger.init_app(app)
 
-    from backend.app.users.routes import bp as user_bp
+    from app.users.routes import bp as user_bp
     app.register_blueprint(user_bp, url_prefix="/users")
 
-    from backend.app.groups.routes import bp as group_bp
+    from app.groups.routes import bp as group_bp
     app.register_blueprint(group_bp, url_prefix="/groups")
 
-    from backend.app.parcels.routes import bp as parcels_bp
+    from app.parcels.routes import bp as parcels_bp
     app.register_blueprint(parcels_bp, url_prefix="/parcels")
 
-    from backend.app.tasks.routes import bp as tasks_bp
+    from app.tasks.routes import bp as tasks_bp
     app.register_blueprint(tasks_bp, url_prefix="/tasks")
 
     @app.route('/login')
