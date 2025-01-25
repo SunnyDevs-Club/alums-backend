@@ -31,7 +31,7 @@ def create_app(config_class=Config):
     from app.tasks.routes import bp as tasks_bp
     app.register_blueprint(tasks_bp, url_prefix="/tasks")
 
-    @app.route('/login')
+    @app.post('/login')
     def login():
         """Login endpoint.
         method: POST,
