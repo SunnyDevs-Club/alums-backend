@@ -5,7 +5,7 @@ from geoalchemy2 import types as geo_types
 import geoalchemy2.functions as func
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from backend.app.extensions import db
+from app.extensions import db
 
 
 class User(db.Model):
