@@ -70,10 +70,10 @@ def get_parcels():
     data = request.get_json()
     if 'region' in data and 'district' in data:
         parcels = Parcel.get_all(region=data['region'], district=data['district'])
-
+        res = [parcel.to_dict() for parcel in parcels]
         return {
-            'data': [parcel.to_dict() for parcel in parcels],
-            'total': len(parcels)
+            'data': res,
+            'total': len(res)
         }, 200
 
 
