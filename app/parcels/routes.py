@@ -23,21 +23,27 @@ def add_crop_type():
     Returns:
 
     """
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    user = User.get(data['requested_from'])
+        user = User.get(data['requested_from'])
 
-    if user.role != 'admin':
+        if user.role != 'admin':
+            return {
+                'message': "Only admin can add new crops"
+            }, 400
+
+        new_crop_type = CropType(**data['data'])
+        new_crop_type.add()
+
         return {
-            'message': "Only admin can add new crops"
+            "message": "Created successfully"
+        }, 201
+    except Exception as e:
+        print(e)
+        return {
+            "message": "Error occurred"
         }, 400
-
-    new_crop_type = CropType(**data['data'])
-    new_crop_type.add()
-
-    return {
-        "message": "Created successfully"
-    }, 201
 
 
 @bp.get('/crops')

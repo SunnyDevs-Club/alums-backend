@@ -280,7 +280,7 @@ class Parcel(db.Model):
             db.session.close()
 
     def to_dict(self):
-        geom_json = db.session.scalar(func.ST_AsGeoJSON(self.geom))
+        geom_json = db.session.scalar(func.ST_AsGeoJSON(self.parcel_geom))
         return {
             'parcel_id': self.parcel_id,
             'parcel_geom': geom_json,
