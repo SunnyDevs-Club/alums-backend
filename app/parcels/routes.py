@@ -63,13 +63,13 @@ def get_crop_by_id(crop_id):
 @bp.get('/')
 def get_parcels():
     """
-    Body: region, district. Both must be present
+    Query Params: region, district. Both must be present
     Returns:
 
     """
-    data = request.get_json()
-    if 'region' in data and 'district' in data:
-        parcels = Parcel.get_all(region=data['region'], district=data['district'])
+    query_args = request.args
+    if 'region' in query_args and 'district' in query_args:
+        parcels = Parcel.get_all(region=query_args['region'], district=query_args['district'])
         res = [parcel.to_dict() for parcel in parcels]
         return {
             'data': res,
