@@ -75,8 +75,10 @@ def get_tasks():
         tasks = Task.get_for_admin(admin_id=current_user.user_id)
     else:
         tasks = Task.get_for_worker(worker_id=current_user.user_id)
+    
+    tasks = [task.to_dict() for task in tasks]
 
     return {
         "total": len(tasks),
-        "data": [task.to_dict() for task in tasks]
+        "data": tasks
     }
