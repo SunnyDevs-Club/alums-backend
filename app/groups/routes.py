@@ -7,7 +7,7 @@ from app.groups import bp
 @bp.get('/<int:group_id>')
 def get_single_group(group_id):
     """
-    Get single user by its user_id
+    Get single group by its group_id
     """
     group = Group.get(group_id)
     if not group:
@@ -16,18 +16,18 @@ def get_single_group(group_id):
     return group.to_dict(), 200
 
 
-@bp.delete('/<int:group_id>')
-def delete_group(group_id):
-    """
-    Delete user
-    """
-    group = Group.get(group_id)
-    if not group:
-        return {"message": "User not found"}, 404
+# @bp.delete('/<int:group_id>')
+# def delete_group(group_id):
+#     """
+#     Delete user
+#     """
+#     group = Group.get(group_id)
+#     if not group:
+#         return {"message": "User not found"}, 404
 
-    group.delete()
+#     group.delete()
 
-    return {"message": "User deleted successfully"}, 200
+#     return {"message": "User deleted successfully"}, 200
 
 
 @bp.get('/')
@@ -62,7 +62,7 @@ def create_group():
     if admin.role != 'admin':
         return {
             "message": "Only admin can create new users"
-        }, 400
+        }, 403
 
     new_group = Group(group_name=data['data']['group_name'])
     new_group.add()

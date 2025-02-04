@@ -8,6 +8,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions import db
 
 
+USER_ROLES = [
+    'worker',
+    'admin'
+]
+
+
 class User(db.Model):
     __tablename__ = 'user'  # The name of the table in your database
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -45,6 +51,17 @@ class User(db.Model):
     @classmethod
     def get_all(cls) -> list['User']:
         return db.session.execute(db.select(User).order_by(User.last_name)).scalars()
+    
+    @classmethod
+    def get_by_group(cls, group_id: int):
+        return db.session.execute(db.select(User).where(User.group_id == group_id).order_by(User.last_name)).scalars()
+    
+    @classmethod
+    def get_by_role(cls, role: str):
+        if role in USER_ROLES:
+            return db.session.execute(db.selecte(User).where(User.role == role))
+        else:
+            raise ValueError("provided role does not exists!")
 
     def update(self):
         try:

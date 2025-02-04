@@ -13,29 +13,51 @@ def get_single_user(user_id):
     if not user:
         return {"message": "User not found"}, 404
 
-    return user.to_dict(), 200
+    return {
+        "total": 1,
+        "data": user.to_dict()
+    }, 200
 
 
-@bp.delete('/<int:user_id>')
-def delete_user(user_id):
-    """
-    Delete user
-    """
-    user = User.get(user_id)
-    if not user:
-        return {"message": "User not found"}, 404
+# @bp.delete('/<int:user_id>')
+# def delete_user(user_id):
+#     """
+#     Delete user
+#     """
+#     user = User.get(user_id)
+#     if not user:
+#         return {"message": "User not found"}, 404
 
-    user.delete()
+#     user.delete()
 
-    return {"message": "User deleted successfully"}, 200
+#     return {"message": "User deleted successfully"}, 200
 
 
 @bp.get('/')
 def get_all_users():
     """
-    Get All users. filter with query parameters: 'role'
+    Get All users. filter with query parameters: 'role', 'group_id'
     """
-    users = User.get_all()
+
+    if request.args.get('role'):
+        try:
+            users = User.get_by_role(request.args.get('role'))
+        except ValueError as e:
+            print(e)
+            return {
+                'message': e
+            }, 404
+    elif request.args.get('group_id'):
+        try:
+            users = User.get_by_group(request.args.get('group_id'))
+        except Exception as e:
+            print(e)
+            return {
+                'message': e
+            }, 404
+    else:
+        users = User.get_all()
+    
     users_data = [user.to_dict() for user in users]
 
     return {
@@ -67,7 +89,7 @@ def create_user():
     if admin.role != 'admin':
         return {
             "message": "Only admin can create new users"
-        }, 400
+        }, 403
 
     user_data = {
         **data['data']
